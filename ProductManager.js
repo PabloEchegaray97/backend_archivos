@@ -1,5 +1,4 @@
 const fs = require("node:fs");
-const { json } = require("stream/consumers");
 
 class ProductManager {
   products;
@@ -25,7 +24,7 @@ class ProductManager {
     await this.saveInFile();
   }
 
-  updateProduct(product, id) {
+  async updateProduct(product, id) {
     const productIndex = this.products.findIndex(
       (existingProduct) => existingProduct.id === id
     );
@@ -34,7 +33,7 @@ class ProductManager {
       product.id = id;
       //this.deleteProduct(id);
       this.products[productIndex] = product;
-      this.saveInFile();
+      await this.saveInFile();
     }
   }
   verifyProduct(product) {
@@ -98,43 +97,47 @@ class ProductManager {
     }
   }
 }
+async function main() {
 
 
-const MyPM = new ProductManager("./products.json");
+  const MyPM = new ProductManager("./products.json");
 
-MyPM.addProduct({
-  title: "Smart TV Led",
-  description: "Bgh 43 Full Hd Pne040253 Android 220v",
-  price: 63.999,
-  thumbnail:
-    "https://http2.mlstatic.com/D_NQ_NP_689494-MLA51838855315_102022-O.webp",
-  code: "1051",
-  stock: 5,
-});
-MyPM.addProduct({
-  title: "Sommier",
-  description: "La Cardeuse Native 400 King de 200cmx200cm gris",
-  price: 150.92,
-  thumbnail:
-    "https://http2.mlstatic.com/D_NQ_NP_986182-MLA49472314801_032022-O.webp",
-  code: "6541",
-  stock: 4,
-});
-
-console.log("Todos los productos: ", MyPM.getProducts());
-console.log("Producto de id=1: ", MyPM.getProductById(1));
-MyPM.deleteProduct(0);
-/* MyPM.updateProduct(
-  {
-    title: "Sommier Updated",
+  await MyPM.addProduct({
+    title: "Smart TV Led",
+    description: "Bgh 43 Full Hd Pne040253 Android 220v",
+    price: 63.999,
+    thumbnail:
+      "https://http2.mlstatic.com/D_NQ_NP_689494-MLA51838855315_102022-O.webp",
+    code: "1051",
+    stock: 5,
+  });
+  await MyPM.addProduct({
+    title: "Sommier",
     description: "La Cardeuse Native 400 King de 200cmx200cm gris",
     price: 150.92,
     thumbnail:
       "https://http2.mlstatic.com/D_NQ_NP_986182-MLA49472314801_032022-O.webp",
     code: "6541",
     stock: 4,
-  },
-  1
-); */
+  });
 
-console.log("Todos los productos: ", MyPM.getProducts());
+  console.log("Todos los productos: ", MyPM.getProducts());
+  console.log("Producto de id=1: ", MyPM.getProductById(1));
+  await MyPM.deleteProduct(0);
+  await MyPM.updateProduct(
+    {
+      title: "Sommier Updated",
+      description: "La Cardeuse Native 400 King de 200cmx200cm gris",
+      price: 150.92,
+      thumbnail:
+        "https://http2.mlstatic.com/D_NQ_NP_986182-MLA49472314801_032022-O.webp",
+      code: "6541",
+      stock: 4,
+    },
+    1
+  );
+
+  console.log("Todos los productos: ", MyPM.getProducts());
+}
+
+main().finally(() => console.log("Fin"));
