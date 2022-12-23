@@ -20,7 +20,7 @@ class ProductManager {
 
   async deleteProduct(id) {
     this.products = this.products.filter((product) => product.id !== id);
-    console.log("xdaaaa", this.products);
+    
     await this.saveInFile();
   }
 
