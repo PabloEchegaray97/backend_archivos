@@ -4,7 +4,7 @@ class ProductManager {
   products;
   constructor(path) {
     this.path = path;
-    this.lastId = -1;
+    this.lastId = 0;
     this.products = [];
     this.loadFile();
   }
